@@ -1,41 +1,60 @@
 # AUR Skills
 
-OpenCode skills for Arch Linux AUR package authoring and maintenance.
+A collection of OpenCode skills for Arch Linux AUR package development — creating PKGBUILDs, auditing, building, submitting, and maintaining packages.
 
-## Included skills
+## Skills
 
-- **aur-author** — Write PKGBUILDs, fix lint errors, and submit packages to the [Arch User Repository](https://aur.archlinux.org/).
+### aur-guides (Master Dispatcher)
 
-## Install
+Routes to specialized sub-skills for every AUR task.
 
-These skills can be used per-project or installed globally.
+| Sub-skill | Purpose |
+|-----------|---------|
+| **aur-pkgbuild** | PKGBUILD creation and syntax |
+| **aur-package-guidelines** | Arch Linux packaging standards |
+| **aur-submission** | AUR submission and maintenance |
+| **aur-audit** | Package auditing and validation |
+| **aur-makepkg** | Build process configuration |
+| **aur-vcs-packages** | Version Control System packages |
+| **aur-pacman** | Pacman usage guide |
+| **aur-helpers** | AUR helper tools (yay, paru) |
 
-### Per-project (recommended)
+## Installation
+
+Symlink the `aur-guides` directory into your agent's skills path:
 
 ```bash
-# From your project root:
 git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
-ln -s /tmp/aur-skills/.opencode/skills/aur-author .opencode/skills/aur-author
+ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
 ```
 
-Or if you want to vendor the skill directly:
+### Supported Tools
+
+| Tool | Install Path | How to Invoke |
+| :--- | :--- | :--- |
+| OpenCode | `~/.config/opencode/skills/` | `Use @aur-guides to help me create...` |
+| Claude Code | `~/.claude/skills/` | `Use @aur-guides to help me create...` |
+| Gemini CLI | `~/.gemini/skills/` | `Use aur-guides to help me create...` |
+| Codex CLI | `~/.agents/skills/` | `Use aur-guides to help me create...` |
+| Cursor | `~/.cursor/skills/` | `@aur-guides help me create...` |
+| Windsurf | `~/.codeium/windsurf/skills/` | `@aur-guides help me create...` |
+
+### Per-project (OpenCode)
 
 ```bash
-git clone https://github.com/enihcam/aur-skills.git
-cp -r aur-skills/.opencode/skills/aur-author .opencode/skills/aur-author
+git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
+ln -s /tmp/aur-skills/aur-guides .opencode/skills/aur-guides
 ```
 
-### Global (available in all projects)
+### Global (OpenCode, all projects)
 
 ```bash
 git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
 mkdir -p ~/.config/opencode/skills
-ln -s /tmp/aur-skills/.opencode/skills/aur-author ~/.config/opencode/skills/aur-author
+ln -s /tmp/aur-skills/aur-guides ~/.config/opencode/skills/aur-guides
 ```
 
 ### Via opencode.json plugin
-
-Add the repo to your `opencode.json` `plugin` array:
 
 ```json
 {
@@ -45,24 +64,23 @@ Add the repo to your `opencode.json` `plugin` array:
 }
 ```
 
-Then symlink the skill into your project:
-
-```bash
-ln -s node_modules/aur-skills/.opencode/skills/aur-author .opencode/skills/aur-author
-```
+Then symlink from `node_modules/aur-skills/aur-guides` into your skills path.
 
 ## Usage
 
-When working on an AUR package, your agent will automatically detect the `aur-author` skill and use it. You can also explicitly invoke it by describing your task (e.g., "write a PKGBUILD for my-app", "fix this PKGBUILD lint error", "submit this package to AUR").
+```
+Use @aur-guides to help me create a PKGBUILD for my project
+Use @aur-pkgbuild to write a PKGBUILD for my-app
+Use @aur-submission to submit my package to the AUR
+```
+
+The `aur-guides` skill is the main dispatcher — it routes to the appropriate sub-skill based on your task.
 
 ## Requirements
 
-- [OpenCode](https://opencode.ai) or compatible agent
-- For AUR submission: an [AUR account](https://aur.archlinux.org) with an uploaded SSH key
+- [OpenCode](https://opencode.ai), [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), or compatible agent
+- For AUR submission: an [AUR account](https://aur.archlinux.org) with uploaded SSH key
 
-## Reference
+## License
 
-- [Arch User Repository](https://wiki.archlinux.org/title/Arch_User_Repository)
-- [Arch package guidelines](https://wiki.archlinux.org/title/Arch_package_guidelines)
-- [PKGBUILD man page](https://man.archlinux.org/man/PKGBUILD.5)
-- [AUR submission guidelines](https://wiki.archlinux.org/title/AUR_submission_guidelines)
+MIT
