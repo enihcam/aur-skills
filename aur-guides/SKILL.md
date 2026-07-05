@@ -1,6 +1,8 @@
 ---
 name: aur-guides
 description: Master skill for AUR (Arch User Repository) package development. Dispatches to specialized sub-skills for creating PKGBUILDs, auditing packages, submitting to AUR, and more. Use when working with AUR packages, PKGBUILDs, makepkg, pacman, or any Arch Linux packaging task.
+license: MIT
+compatibility: opencode
 ---
 
 # Skill: aur-guides
@@ -27,6 +29,7 @@ Master dispatcher for AUR package development. Routes to the right sub-skill for
 | VCS packages (-git, -svn, -hg) | `aur-vcs-packages` |
 | Pacman usage & queries | `aur-pacman` |
 | AUR helpers (yay, paru) | `aur-helpers` |
+| Aurweb RPC interface (queries, metadata) | `aur-rpc` |
 
 ## Complete AUR Package Lifecycle
 
@@ -48,6 +51,10 @@ Master dispatcher for AUR package development. Routes to the right sub-skill for
 
 **VCS package:** `aur-vcs-packages` → `aur-pkgbuild` → `aur-audit` → `aur-submission`
 
+**Verify metadata / build helper:** `aur-rpc` (search, info, metadata archives)
+
+**Build reproducible:** `aur-audit` → `makerepropkg` (see aur-package-guidelines)
+
 ## Key Resources
 
 - [Arch Wiki](https://wiki.archlinux.org/)
@@ -55,6 +62,8 @@ Master dispatcher for AUR package development. Routes to the right sub-skill for
 - [PKGBUILD man page](https://man.archlinux.org/man/PKGBUILD.5)
 - [Arch package guidelines](https://wiki.archlinux.org/title/Arch_package_guidelines)
 - [AUR submission guidelines](https://wiki.archlinux.org/title/AUR_submission_guidelines)
+- [Aurweb RPC interface](https://wiki.archlinux.org/title/Aurweb_RPC_interface)
+- [AUR metadata archives announcement](https://lists.archlinux.org/archives/list/aur-general@lists.archlinux.org/message/D4YC6Y7L4T5VSEONUCLHOX2R4NJKNIDP/)
 
 ## Essential Commands
 
@@ -76,4 +85,9 @@ shellcheck --shell=bash --exclude=SC2034,SC2154,SC2164 PKGBUILD
 5. **Quote** "$pkgdir" and "$srcdir" everywhere
 6. **Regenerate .SRCINFO** before every push
 7. **Use :: syntax** in source array for unique filenames
-8. **License PKGBUILD under 0BSD**
+8. **License PKGBUILD under 0BSD** (ship a `LICENSE` file + `REUSE.toml` in the repo)
+9. **No new PKGBUILD variables/functions** unless prefixed with `_` (avoid conflicts with makepkg internals)
+10. **Do NOT use makepkg subroutines** (`error`, `msg`, `msg2`, `plain`, `warning`) — use `printf`/`echo`
+11. **Avoid `/usr/libexec/`** — use `/usr/lib/$pkgname/` instead
+12. **For git sources, use the tag object hash** (`git rev-parse "v$pkgver"`) — tag names can be force-pushed
+13. **Verify package metadata** with the AUR RPC (`aur-rpc`) before assuming upstream state

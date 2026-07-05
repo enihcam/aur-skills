@@ -1,6 +1,8 @@
 ---
 name: aur-makepkg
 description: Configure and use makepkg to build Arch Linux packages. Covers flags, options arrays, environment variables, and chroot builds. Use when building packages, troubleshooting build failures, or configuring build settings.
+license: MIT
+compatibility: opencode
 ---
 
 # Skill: aur-makepkg
@@ -59,6 +61,15 @@ Use chroot builds to verify the package builds from scratch in a clean environme
 - **Network required at build:** unacceptable for official repos; note in comments for AUR
 - **Outdated checksums:** run `updpkgsums`
 - **Parallel build failure:** set `MAKEFLAGS="-j1"` or add `!parallelsmake` to options
+
+## Reproducible Builds
+
+```bash
+makerepropkg *.pkg.tar.zst   # from devtools — verify a package is reproducible
+repro -f *.pkg.tar.zst       # from archlinux-repro
+```
+
+If the build embeds timestamps, export `SOURCE_DATE_EPOCH` (UNIX epoch seconds) — see [reproducible-builds.org](https://reproducible-builds.org/docs/source-date-epoch/).
 
 ## Related
 

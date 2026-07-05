@@ -1,6 +1,8 @@
 ---
 name: aur-pkgbuild
 description: Create and edit PKGBUILD files for Arch Linux packages. Covers all variables, functions, naming, versioning, sources, and validation. Use when writing a new PKGBUILD, editing an existing one, or fixing build issues.
+license: MIT
+compatibility: opencode
 ---
 
 # Skill: aur-pkgbuild
@@ -44,6 +46,14 @@ package() { cd "$srcdir/$pkgname-$pkgver"; make DESTDIR="$pkgdir" install; }
 
 **Always quote** `"$srcdir"` and `"$pkgdir"` — unquoted paths break with spaces.
 
+**No new variables or functions** unless prefixed with `_` (e.g. `_customvar=`) — unprefixed names can conflict with makepkg internals.
+
+**Do NOT use makepkg subroutines** (`error`, `msg`, `msg2`, `plain`, `warning`) — they may change. Use `printf` or `echo`.
+
+**Keep line length below ~100 characters** — wrap long `source=()`, `depends=()`, etc. across multiple lines.
+
+Install-time messages (extra setup, post-install notes) belong in a `.install` file, not in the `package()` function.
+
 ## Naming
 
 - **Suffixes:** `-git`, `-svn`, `-hg`, `-bzr`, `-darcs` for VCS; `-bin` for prebuilt
@@ -62,20 +72,24 @@ package() { cd "$srcdir/$pkgname-$pkgver"; make DESTDIR="$pkgdir" install; }
 # Custom filename to avoid generic downloads
 source=("unique-name.tar.gz::https://example.com/download/v1.0.tar.gz")
 
-# VCS sources
-source=("name::git+https://github.com/user/repo.git#branch=main")
+# VCS sources — prefer tag object hash over tag name (tags can be force-pushed)
+_tag=$(git rev-parse "v$pkgver")   # compute once, e.g. from a release-monitoring script
+source=("git+https://github.com/user/repo.git#tag=${_tag}")
 
 # PGP verification
 validpgpkeys=('FINGERPRINT')
 ```
+
+If upstream signs only commits/tags (not tarballs), verify with `gpg.ssh.allowedSignersFile` for SSH-signed tags, or via `git verify-tag` / `git verify-commit`.
 
 `updpkgsums PKGBUILD` to regenerate checksums. Use `b2sums` or `sha512sums` over `md5sums`.
 
 ## Licensing
 
 - PKGBUILD `license` = SPDX identifier: `MIT`, `GPL-3.0-or-later`, `Apache-2.0`, `BSD-3-Clause`, `0BSD`
-- AUR repo itself (PKGBUILD + helper files) should be **0BSD** licensed
-- For custom/MIT/BSD — install license file into `$pkgdir/usr/share/licenses/$pkgname/`
+- AUR repo itself (PKGBUILD + helper files) should be **0BSD** licensed — ship a `LICENSE` file containing [the canonical Arch 0BSD text](https://gitlab.archlinux.org/archlinux/devtools/-/blob/master/data/LICENSE?ref_type=heads) and a `REUSE.toml` declaring it (use `pkgctl license setup` to generate one)
+- For custom/MIT/BSD of the *upstream* software — install license file into `$pkgdir/usr/share/licenses/$pkgname/`
+- Run `pkgctl license check` from `devtools` to verify `REUSE.toml` compliance
 
 ## Validation
 

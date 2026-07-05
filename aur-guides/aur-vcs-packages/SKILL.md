@@ -1,6 +1,8 @@
 ---
 name: aur-vcs-packages
 description: Version Control System packages (-git, -svn, -hg) for the AUR. Covers naming, dynamic pkgver(), source handling, and best practices. Use when creating or maintaining -git/-svn/-hg packages.
+license: MIT
+compatibility: opencode
 ---
 
 # Skill: aur-vcs-packages
@@ -20,6 +22,20 @@ Create and maintain VCS packages that build from live repository sources.
 source=("$pkgname::git+https://github.com/user/repo.git#branch=main")
 sha256sums=('SKIP')   # VCS sources always use SKIP
 ```
+
+For pinned-tag sources, prefer the **tag object hash** over the tag name (tag names can be force-pushed):
+
+```bash
+_tag=$(git rev-parse "v$pkgver")   # resolves once at build prep time
+source=("git+https://github.com/user/repo.git#tag=${_tag}")
+
+pkgver() {
+  cd "$srcdir/repo"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+```
+
+Using `pkgver()` separately from `_tag` prevents accidentally bumping `pkgver` without updating the pinned tag.
 
 ## Dynamic pkgver()
 

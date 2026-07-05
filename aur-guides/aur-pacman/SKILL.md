@@ -1,6 +1,8 @@
 ---
 name: aur-pacman
 description: Manage packages with pacman on Arch Linux. Covers install, remove, query, search, and cache management. Use when installing, removing, querying, or troubleshooting packages on an Arch system.
+license: MIT
+compatibility: opencode
 ---
 
 # Skill: aur-pacman
@@ -28,8 +30,9 @@ pacman -Si pkgname       # remote package info
 pacman -Qi pkgname       # installed package info
 pacman -Ql pkgname       # files owned by package
 pacman -Qo /path/file    # which package owns file
-pacman -Fl pattern       # files in remote package (pkgfile)
+pacman -Fl pattern       # files in remote package (requires pkgfile)
 pacman -Qdt              # orphaned packages
+pacman -Qmq              # foreign packages (typically AUR)
 ```
 
 ## Cache Management

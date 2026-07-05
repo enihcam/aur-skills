@@ -1,6 +1,8 @@
 ---
 name: aur-helpers
 description: Use AUR helper tools (yay, paru) to build and install packages from the AUR. Covers common commands and safety practices. Use when installing or managing AUR packages via helpers.
+license: MIT
+compatibility: opencode
 ---
 
 # Skill: aur-helpers
@@ -48,9 +50,12 @@ paru -Pg                 # print config
 - **Always review the PKGBUILD** before building — helpers don't replace human review
 - Use `--noconfirm` carefully — it skips all prompts including diffs
 - Check for suspicious sources, install paths, or post-install scripts
+- Use a scanner (`traur`, `ks-aur-scanner`) before installing unfamiliar packages
 - Prefer building in a chroot: `yay -S --builddir /tmp/pkg pkgname`
+- AUR helpers are [officially unsupported](https://bbs.archlinux.org/viewtopic.php?pid=828310#p828310)
 
 ## Related
 
 - `aur-pacman` — underlying pacman commands
 - `aur-pkgbuild` — understanding PKGBUILDs
+- `aur-rpc` — the JSON RPC helpers query under the hood
