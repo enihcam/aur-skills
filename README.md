@@ -1,6 +1,6 @@
 # AUR Skills
 
-A collection of OpenCode skills for Arch Linux AUR package development — creating PKGBUILDs, auditing, building, submitting, and maintaining packages.
+A collection of instruction sets for Arch Linux AUR package development — creating PKGBUILDs, auditing, building, submitting, and maintaining packages. Works with any LLM agent that reads markdown skill files.
 
 ## Skills
 
@@ -22,51 +22,43 @@ Routes to specialized sub-skills for every AUR task.
 
 ## Installation
 
-Symlink the `aur-guides` directory into your agent's skills path:
+### One-step (any agent)
+
+Copy the repo URL and paste it into your agent:
+
+```
+https://github.com/enihcam/aur-skills
+```
+
+Then ask your agent to install the `aur-guides` skill from that URL. Most agents
+will read the `aur-guides/` directory from GitHub directly, without cloning or
+symlinking.
+
+### Manual (symlink)
+
+If your agent requires skills to be installed locally:
 
 ```bash
 git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
 ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
 ```
 
-### Supported Tools
+| Tool | Install Path |
+| :--- | :--- |
+| OpenCode | `~/.config/opencode/skills/aur-guides` |
+| Claude Code | `~/.claude/skills/aur-guides` |
+| Gemini CLI | `~/.gemini/skills/aur-guides` |
+| Codex CLI | `~/.agents/skills/aur-guides` |
+| Cursor | `~/.cursor/skills/aur-guides` |
+| Windsurf | `~/.codeium/windsurf/skills/aur-guides` |
 
-| Tool | Install Path | How to Invoke |
-| :--- | :--- | :--- |
-| OpenCode | `~/.config/opencode/skills/` | `Use @aur-guides to help me create...` |
-| Claude Code | `~/.claude/skills/` | `Use @aur-guides to help me create...` |
-| Gemini CLI | `~/.gemini/skills/` | `Use aur-guides to help me create...` |
-| Codex CLI | `~/.agents/skills/` | `Use aur-guides to help me create...` |
-| Cursor | `~/.cursor/skills/` | `@aur-guides help me create...` |
-| Windsurf | `~/.codeium/windsurf/skills/` | `@aur-guides help me create...` |
-
-### Per-project (OpenCode)
+Per-project (OpenCode):
 
 ```bash
 git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
 mkdir -p .opencode/skills
 ln -s /tmp/aur-skills/aur-guides .opencode/skills/aur-guides
 ```
-
-### Global (OpenCode, all projects)
-
-```bash
-git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
-mkdir -p ~/.config/opencode/skills
-ln -s /tmp/aur-skills/aur-guides ~/.config/opencode/skills/aur-guides
-```
-
-### Via opencode.json plugin
-
-```json
-{
-  "plugin": [
-    "aur-skills@git+https://github.com/enihcam/aur-skills.git"
-  ]
-}
-```
-
-Then symlink from `node_modules/aur-skills/aur-guides` into your skills path.
 
 ## Usage
 
@@ -76,11 +68,12 @@ Use @aur-pkgbuild to write a PKGBUILD for my-app
 Use @aur-submission to submit my package to the AUR
 ```
 
-The `aur-guides` skill is the main dispatcher — it routes to the appropriate sub-skill based on your task.
+The `aur-guides` skill is the main dispatcher — it routes to the appropriate
+sub-skill based on your task.
 
 ## Requirements
 
-- [OpenCode](https://opencode.ai), [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), or compatible agent
+- An LLM agent that reads skill files (OpenCode, Claude Code, Gemini CLI, Codex, etc.)
 - For AUR submission: an [AUR account](https://aur.archlinux.org) with uploaded SSH key
 
 ## License
