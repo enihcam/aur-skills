@@ -2,7 +2,6 @@
 name: aur-pkgbuild
 description: Create and edit PKGBUILD files for Arch Linux packages. Covers all variables, functions, naming, versioning, sources, and validation. Use when writing a new PKGBUILD, editing an existing one, or fixing build issues.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-pkgbuild

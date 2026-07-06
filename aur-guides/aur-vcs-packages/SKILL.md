@@ -2,7 +2,6 @@
 name: aur-vcs-packages
 description: Version Control System packages (-git, -svn, -hg) for the AUR. Covers naming, dynamic pkgver(), source handling, and best practices. Use when creating or maintaining -git/-svn/-hg packages.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-vcs-packages

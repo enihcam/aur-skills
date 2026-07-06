@@ -2,7 +2,6 @@
 name: aur-makepkg
 description: Configure and use makepkg to build Arch Linux packages. Covers flags, options arrays, environment variables, and chroot builds. Use when building packages, troubleshooting build failures, or configuring build settings.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-makepkg

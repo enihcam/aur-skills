@@ -2,7 +2,6 @@
 name: aur-guides
 description: Master skill for AUR (Arch User Repository) package development. Dispatches to specialized sub-skills for creating PKGBUILDs, auditing packages, submitting to AUR, and more. Use when working with AUR packages, PKGBUILDs, makepkg, pacman, or any Arch Linux packaging task.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-guides

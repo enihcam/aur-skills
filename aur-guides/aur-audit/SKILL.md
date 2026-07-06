@@ -2,7 +2,6 @@
 name: aur-audit
 description: Audit and validate PKGBUILDs before AUR submission. Covers namcap, shellcheck, chroot testing, and common error fixes. Use when running validation, fixing lint errors, or pre-submission quality checks.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-audit

@@ -2,7 +2,6 @@
 name: aur-pacman
 description: Manage packages with pacman on Arch Linux. Covers install, remove, query, search, and cache management. Use when installing, removing, querying, or troubleshooting packages on an Arch system.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-pacman

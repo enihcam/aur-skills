@@ -1,4 +1,18 @@
-.opencode/
-.roo/
-openspec/
-docs/
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.bak
+
+# Build outputs
+*.pkg.tar.zst
+*.log

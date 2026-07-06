@@ -18,6 +18,7 @@ Routes to specialized sub-skills for every AUR task.
 | **aur-vcs-packages** | Version Control System packages |
 | **aur-pacman** | Pacman usage guide |
 | **aur-helpers** | AUR helper tools (yay, paru) |
+| **aur-rpc** | AUR web RPC interface (search, info, metadata archives) |
 
 ## Installation
 
@@ -43,6 +44,7 @@ ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
 
 ```bash
 git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
+mkdir -p .opencode/skills
 ln -s /tmp/aur-skills/aur-guides .opencode/skills/aur-guides
 ```
 

@@ -2,7 +2,6 @@
 name: aur-submission
 description: Submit and maintain packages in the Arch User Repository. Covers SSH setup, Git workflow, .SRCINFO, maintenance, and request types. Use when submitting a new package, updating an existing one, or requesting deletion/merge/orphan.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-submission

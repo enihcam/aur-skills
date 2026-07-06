@@ -2,7 +2,6 @@
 name: aur-rpc
 description: Query the Aurweb RPC interface (v5) to search AUR packages, retrieve package info, and consume the metadata archives. Use when building an AUR helper, verifying upstream state, bulk-fetching package metadata, or integrating with the AUR programmatically.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-rpc

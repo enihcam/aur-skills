@@ -2,7 +2,6 @@
 name: aur-package-guidelines
 description: Arch Linux packaging standards and conventions. Covers naming, versioning, dependencies, directory layout, and licensing rules. Use when reviewing a PKGBUILD for compliance or learning Arch packaging standards.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-package-guidelines

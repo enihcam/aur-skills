@@ -2,7 +2,6 @@
 name: aur-helpers
 description: Use AUR helper tools (yay, paru) to build and install packages from the AUR. Covers common commands and safety practices. Use when installing or managing AUR packages via helpers.
 license: MIT
-compatibility: opencode
 ---
 
 # Skill: aur-helpers
