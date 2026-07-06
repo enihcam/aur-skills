@@ -2,6 +2,8 @@
 
 A collection of instruction sets for Arch Linux AUR package development — creating PKGBUILDs, auditing, building, submitting, and maintaining packages. Works with any LLM agent that reads markdown skill files.
 
+> Fork of [pahheb-skills](https://github.com/Pahheb/pahheb-skills) — adapted for Arch Linux AUR package development.
+
 ## Skills
 
 ### aur-guides (Master Dispatcher)
