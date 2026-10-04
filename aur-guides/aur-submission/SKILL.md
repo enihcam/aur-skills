@@ -14,7 +14,7 @@ Submit, update, and maintain packages in the Arch User Repository.
 
 - Package must NOT exist in official repos (core/extra/community)
 - Must be useful, unique, and x86_64-compatible
-- Must include a LICENSE file (0BSD recommended for PKGBUILD)
+- Add a package-source `LICENSE` and/or `REUSE.toml`; 0BSD is encouraged but not mandatory for every AUR package
 - Prebuilt binaries allowed only with `-bin` suffix
 - Modified official packages need different `pkgname` + `conflicts`/`provides`
 
@@ -44,8 +44,8 @@ Each AUR repo is a **package base** (`PackageBase`). A base can produce one or m
 **New package:**
 ```bash
 git -c init.defaultBranch=master clone ssh://aur@aur.archlinux.org/pkgname.git
-cp /path/to/PKGBUILD .SRCINFO LICENSE .   # include patches, .install files
-git add PKGBUILD .SRCINFO LICENSE
+cp /path/to/PKGBUILD /path/to/.SRCINFO .   # also copy patches, .install, and license files
+git add PKGBUILD .SRCINFO                  # add every copied helper/license file too
 git commit -m "Initial release: pkgname pkgver-pkgrel"
 git push origin master
 ```
@@ -63,12 +63,13 @@ git push
 
 Always push to `master` branch. Use meaningful commit messages.
 
-## License File (0BSD)
+## Package-source Licensing
 
-Every AUR repo must contain:
+This is separate from PKGBUILD `license=()`, which describes the upstream software.
 
-1. **`LICENSE`** — copy of the [canonical Arch 0BSD text](https://gitlab.archlinux.org/archlinux/devtools/-/blob/master/data/LICENSE?ref_type=heads)
-2. **`REUSE.toml`** — declare the license for each file (generate with `pkgctl license setup`, verify with `pkgctl license check`)
+- Add a package-source `LICENSE` and/or `REUSE.toml` to the AUR repository.
+- The AUR guidelines encourage [0BSD](https://gitlab.archlinux.org/archlinux/devtools/-/blob/master/data/LICENSE?ref_type=heads), but [RFC 0040](https://rfc.archlinux.page/0040-license-package-sources/#aur) does not require it for every AUR package. Packages without the expected 0BSD license are not eligible for promotion to official repositories.
+- For a promotion-compatible 0BSD + REUSE setup, run `pkgctl license setup`, review annotations for third-party files, and verify with `pkgctl license check`.
 
 ## Rewriting Git History
 
@@ -131,7 +132,7 @@ Email obfuscation: `user at example dot com` format. When adopting, move previou
 - [ ] `namcap PKGBUILD` and `namcap *.pkg.tar.zst` — no errors
 - [ ] `shellcheck PKGBUILD` — passes
 - [ ] `.SRCINFO` regenerated (`makepkg --printsrcinfo > .SRCINFO`)
-- [ ] `LICENSE` (0BSD) + `REUSE.toml` included (`pkgctl license check` clean)
+- [ ] Package-source `LICENSE` and/or `REUSE.toml` included; if using 0BSD + REUSE, `pkgctl license check` is clean
 - [ ] Maintainer line present, email obfuscated
 - [ ] Review PKGBUILD for malicious or dangerous commands (use `traur` / `ks-aur-scanner`)
 

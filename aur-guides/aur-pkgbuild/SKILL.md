@@ -17,7 +17,7 @@ pkgname=my-app              # lowercase, alphanumeric + @._+-
 pkgver=1.0.0               # no hyphens — use underscores
 pkgrel=1                    # resets to 1 on new upstream version
 arch=('x86_64')             # or 'any'
-license=('MIT')             # SPDX identifier
+license=('MIT')             # SPDX expression for the upstream software
 ```
 
 ## Optional Variables
@@ -85,10 +85,11 @@ If upstream signs only commits/tags (not tarballs), verify with `gpg.ssh.allowed
 
 ## Licensing
 
-- PKGBUILD `license` = SPDX identifier: `MIT`, `GPL-3.0-or-later`, `Apache-2.0`, `BSD-3-Clause`, `0BSD`
-- AUR repo itself (PKGBUILD + helper files) should be **0BSD** licensed — ship a `LICENSE` file containing [the canonical Arch 0BSD text](https://gitlab.archlinux.org/archlinux/devtools/-/blob/master/data/LICENSE?ref_type=heads) and a `REUSE.toml` declaring it (use `pkgctl license setup` to generate one)
-- For custom/MIT/BSD of the *upstream* software — install license file into `$pkgdir/usr/share/licenses/$pkgname/`
-- Run `pkgctl license check` from `devtools` to verify `REUSE.toml` compliance
+- PKGBUILD `license=()` describes the **upstream software**, not the PKGBUILD or AUR repository.
+- Use one [SPDX expression](https://rfc.archlinux.page/0016-spdx-license-identifiers/) per licensing relationship: `license=('MIT')`, `license=('MIT OR Apache-2.0')`, or `license=('BSD-3-Clause AND GPL-2.0-or-later')`. Use `LicenseRef-name` or `custom:name` when no SPDX-listed license matches.
+- Install an upstream license text under `$pkgdir/usr/share/licenses/$pkgname/` when it is package-specific: custom licenses and license families with varying texts such as MIT and BSD. Common exact texts supplied by the `licenses` package do not need a duplicate.
+- License the AUR Git package sources separately. Add a `LICENSE` and/or `REUSE.toml`. 0BSD is encouraged for AUR and required for promotion eligibility; REUSE is the official package-source linting workflow. Neither is a universal AUR submission requirement.
+- If choosing the promotion-compatible 0BSD + REUSE workflow, use `pkgctl license setup`, verify third-party file annotations, and run `pkgctl license check`.
 
 ## Validation
 
