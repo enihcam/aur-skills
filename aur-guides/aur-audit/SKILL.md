@@ -54,11 +54,11 @@ git difftool @~..@ --tool=vimdiff   # full diff view
 | Missing `makedepends` | Add build-time deps (`base-devel` is assumed) |
 | `sha256sums` mismatch | Run `updpkgsums` |
 | `pkgver` has hyphen | Replace with underscore (or quote for upstream use) |
-| Bad `license` format | Use SPDX: `MIT`, `GPL-3.0-or-later`, `BSD-3-Clause`, `0BSD` |
+| Bad `license=()` format | Use one SPDX expression, e.g. `MIT OR Apache-2.0`; use `LicenseRef-name` or `custom:name` for a custom license |
 | `source` URL unreachable | Verify URL; use `name::url` syntax to rename |
 | `pkgdesc` self-referencing | "An editor for X" not "X is an editor for" |
 | Missing `.SRCINFO` | `makepkg --printsrcinfo > .SRCINFO` |
-| Missing LICENSE / REUSE.toml | `pkgctl license setup` then `pkgctl license check` |
+| Missing package-source license | Add `LICENSE` and/or `REUSE.toml`; 0BSD + REUSE is recommended, not mandatory for every AUR package |
 | Path with spaces | Quote `"$pkgdir"` and `"$srcdir"` |
 | `/usr/libexec/` use | Move to `/usr/lib/$pkgname/` |
 | Used `msg`/`msg2`/`error`/`warning`/`plain` | Replace with `printf` or `echo` |
@@ -92,7 +92,7 @@ If timestamps are required at build time, set `SOURCE_DATE_EPOCH`.
 - [ ] `.SRCINFO` regenerated
 - [ ] `makepkg -s` builds successfully
 - [ ] `makepkg --check` tests pass (if applicable)
-- [ ] `pkgctl license check` — clean (REUSE.toml compliant)
+- [ ] Package-source license declared separately from `license=()`; if using 0BSD + REUSE, `pkgctl license check` is clean
 - [ ] `traur` / `ks-aur-scanner` — no critical findings
 - [ ] PGP signatures (if any) verified
 - [ ] Git diff reviewed

@@ -89,12 +89,21 @@ Reference for Arch Linux packaging standards and conventions.
 
 ## Licensing
 
-- `license` field in PKGBUILD = SPDX identifier only (`MIT`, `GPL-3.0-or-later`, `Apache-2.0`, `BSD-3-Clause`, `0BSD`)
-- For the *packaged software*'s license: install to `$pkgdir/usr/share/licenses/$pkgname/`
-- **PKGBUILD and helper files** in the AUR repo are licensed under **0BSD** per [RFC 0040](https://rfc.archlinux.page/0040-license-package-sources/) / [RFC 0052](https://rfc.archlinux.page/0052-reuse/):
-  1. Ship a `LICENSE` file in the repo root with the canonical [Arch 0BSD text](https://gitlab.archlinux.org/archlinux/devtools/-/blob/master/data/LICENSE?ref_type=heads)
-  2. Ship a `REUSE.toml` (generate with `pkgctl license setup`)
-  3. Run `pkgctl license check` — must return no errors
+There are two independent license scopes:
+
+### Packaged software
+
+- PKGBUILD `license=()` describes the **upstream software**, not the PKGBUILD or AUR repository.
+- Use an [SPDX license expression](https://rfc.archlinux.page/0016-spdx-license-identifiers/): `license=('MIT')`, `license=('MIT OR Apache-2.0')`, or `license=('GPL-2.0-only WITH Classpath-exception-2.0')`. Put a composite expression in one quoted array element.
+- For a license absent from the SPDX list, use `LicenseRef-name` or `custom:name` and install its text under `$pkgdir/usr/share/licenses/$pkgname/`.
+- Every declared license needs corresponding text under `/usr/share/licenses`. The `licenses` package supplies common exact texts. Ship a package-specific copy for custom licenses and license families with varying texts, notably MIT and BSD.
+
+### Package sources
+
+- The PKGBUILD, `.install` files, patches, and other AUR Git files have their own licenses. Do not infer these from `license=()`.
+- The [AUR submission guidelines](https://wiki.archlinux.org/title/AUR_submission_guidelines#Rules_of_submission) require a package-source `LICENSE` and/or `REUSE.toml` and encourage 0BSD.
+- [RFC 0040](https://rfc.archlinux.page/0040-license-package-sources/#aur) explicitly does **not** require every AUR package to use 0BSD. A package without the expected 0BSD license is not eligible for promotion to the official repositories.
+- For the recommended promotion-compatible 0BSD + REUSE setup, run `pkgctl license setup`, review annotations for third-party files, then run `pkgctl license check`. Do not relabel upstream files or patches as 0BSD.
 
 ## Reproducible Builds
 

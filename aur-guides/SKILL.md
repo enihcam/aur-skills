@@ -80,11 +80,11 @@ shellcheck --shell=bash --exclude=SC2034,SC2154,SC2164 PKGBUILD
 1. **HTTPS** for all source URLs
 2. **List all direct** dependencies (no transitive reliance)
 3. **b2 or sha512** checksums preferred
-4. **SPDX license identifiers** (GPL-3.0-or-later, MIT, BSD-3-Clause)
+4. **SPDX license expressions** for upstream software (`GPL-3.0-or-later`, `MIT OR Apache-2.0`)
 5. **Quote** "$pkgdir" and "$srcdir" everywhere
 6. **Regenerate .SRCINFO** before every push
 7. **Use :: syntax** in source array for unique filenames
-8. **License PKGBUILD under 0BSD** (ship a `LICENSE` file + `REUSE.toml` in the repo)
+8. **Keep licenses distinct**: `license=()` covers upstream software; an AUR repo needs a package-source `LICENSE` and/or `REUSE.toml`. 0BSD + REUSE is encouraged and promotion-compatible, not mandatory for every AUR package
 9. **No new PKGBUILD variables/functions** unless prefixed with `_` (avoid conflicts with makepkg internals)
 10. **Do NOT use makepkg subroutines** (`error`, `msg`, `msg2`, `plain`, `warning`) — use `printf`/`echo`
 11. **Avoid `/usr/libexec/`** — use `/usr/lib/$pkgname/` instead
