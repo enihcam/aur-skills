@@ -38,11 +38,12 @@ https://github.com/enihcam/aur-skills
 
 ### Manual（symlink）
 
-如果你的 agent 要求本地安装 skill：
+克隆到**持久目录**（不要用 `/tmp`——很多环境是 tmpfs，重启后清空），再把 `aur-guides` 软链到 agent 的 skills 目录：
 
 ```bash
-git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
-ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
+git clone https://github.com/enihcam/aur-skills.git ~/.local/share/aur-skills
+mkdir -p "$(dirname "<install-path>/aur-guides")"
+ln -s ~/.local/share/aur-skills/aur-guides <install-path>/aur-guides
 ```
 
 | Tool | Install Path |
@@ -54,12 +55,19 @@ ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
 | Cursor | `~/.cursor/skills/aur-guides` |
 | Windsurf | `~/.codeium/windsurf/skills/aur-guides` |
 
+之后更新：`git -C ~/.local/share/aur-skills pull`。
+
+**OpenCode 注意：**
+
+- 优先把软链放到 `~/.config/opencode/skills/` 下。若在 `skills` 数组里直接指向该目录之外的 clone，可能每次加载 skill 都弹出访问权限确认。
+- **不要**把本仓库写成 OpenCode `plugin`（`aur-skills@git+…`）。plugin 按 npm 包安装，本仓库没有 `package.json`，启动会失败。
+
 Per-project（OpenCode）：
 
 ```bash
-git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
+git clone https://github.com/enihcam/aur-skills.git ~/.local/share/aur-skills
 mkdir -p .opencode/skills
-ln -s /tmp/aur-skills/aur-guides .opencode/skills/aur-guides
+ln -s ~/.local/share/aur-skills/aur-guides .opencode/skills/aur-guides
 ```
 
 ## Usage

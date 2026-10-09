@@ -62,7 +62,7 @@ git difftool @~..@ --tool=vimdiff   # full diff view
 | Path with spaces | Quote `"$pkgdir"` and `"$srcdir"` |
 | `/usr/libexec/` use | Move to `/usr/lib/$pkgname/` |
 | Used `msg`/`msg2`/`error`/`warning`/`plain` | Replace with `printf` or `echo` |
-| Hash doesn't match a `git+...` source | Use `?signed#tag=<tag-object-hash>` from `git rev-parse` |
+| Hash doesn't match a mutable `git+...` branch | Use `SKIP`, or pin `#tag=`/`#commit=` and store a hardcoded tag object hash (`_tag=…`) |
 
 ## Chroot Testing
 

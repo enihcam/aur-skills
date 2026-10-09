@@ -88,5 +88,5 @@ shellcheck --shell=bash --exclude=SC2034,SC2154,SC2164 PKGBUILD
 9. **No new PKGBUILD variables/functions** unless prefixed with `_` (avoid conflicts with makepkg internals)
 10. **Do NOT use makepkg subroutines** (`error`, `msg`, `msg2`, `plain`, `warning`) — use `printf`/`echo`
 11. **Avoid `/usr/libexec/`** — use `/usr/lib/$pkgname/` instead
-12. **For git sources, use the tag object hash** (`git rev-parse "v$pkgver"`) — tag names can be force-pushed
+12. **For git tag sources, pin the tag object hash** (hardcode `_tag=…` from an offline `git rev-parse "v$pkgver"`) — tag names can be force-pushed; do not run `rev-parse` inside the PKGBUILD
 13. **Verify package metadata** with the AUR RPC (`aur-rpc`) before assuming upstream state

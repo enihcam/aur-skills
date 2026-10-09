@@ -40,11 +40,12 @@ symlinking.
 
 ### Manual (symlink)
 
-If your agent requires skills to be installed locally:
+Clone somewhere **persistent** (not `/tmp` — many systems mount it as tmpfs and wipe it on reboot), then symlink `aur-guides` into your agent's skills directory:
 
 ```bash
-git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
-ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
+git clone https://github.com/enihcam/aur-skills.git ~/.local/share/aur-skills
+mkdir -p "$(dirname "<install-path>/aur-guides")"
+ln -s ~/.local/share/aur-skills/aur-guides <install-path>/aur-guides
 ```
 
 | Tool | Install Path |
@@ -56,12 +57,19 @@ ln -s /tmp/aur-skills/aur-guides <install-path>/aur-guides
 | Cursor | `~/.cursor/skills/aur-guides` |
 | Windsurf | `~/.codeium/windsurf/skills/aur-guides` |
 
+Update later with `git -C ~/.local/share/aur-skills pull`.
+
+**OpenCode notes:**
+
+- Prefer the symlink under `~/.config/opencode/skills/` above. Pointing a `skills` array entry at a clone *outside* that directory can trigger a permission prompt on every skill load.
+- Do **not** add this repo as an OpenCode `plugin` (`aur-skills@git+…`). Plugins are installed as npm packages; this repository has no `package.json`, so that entry fails on startup.
+
 Per-project (OpenCode):
 
 ```bash
-git clone https://github.com/enihcam/aur-skills.git /tmp/aur-skills
+git clone https://github.com/enihcam/aur-skills.git ~/.local/share/aur-skills
 mkdir -p .opencode/skills
-ln -s /tmp/aur-skills/aur-guides .opencode/skills/aur-guides
+ln -s ~/.local/share/aur-skills/aur-guides .opencode/skills/aur-guides
 ```
 
 ## Usage
