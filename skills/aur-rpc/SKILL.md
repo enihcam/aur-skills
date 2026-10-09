@@ -59,7 +59,7 @@ Every response is JSON with the same shape:
 }
 ```
 
-`type: "error"` includes an additional `"error": "..."` string.
+`type: "error"` includes an additional `"error": "..."` string. Errors still return HTTP 200 — check `type`, not the status code.
 
 ## Fields
 
@@ -107,7 +107,7 @@ Append `?callback=<name>` to wrap the response in a JS function call. Useful fro
 
 - HTTP GET URI: max **8190 bytes** (nginx with HTTP/2 enforces **4443 bytes**)
 - Search keyword: min **2 characters**
-- Search returns truncated at **5000 results**
+- Search with **≥5000 hits** fails with `"error": "Too many package results."` (no partial results)
 - Rate limit: **4000 requests/day per IP**
 - `info` with >200 packages needs to be split
 
@@ -135,9 +135,13 @@ curl 'https://aur.archlinux.org/rpc/v5/search/neovim'
 curl 'https://aur.archlinux.org/rpc/v5/info?arg%5B%5D=yay&arg%5B%5D=paru'
 
 # Orphan packages (empty maintainer). Path /search/ with no keyword 404s —
-# use query-string arg= instead (returns 200; may error if result set is huge).
-curl 'https://aur.archlinux.org/rpc/v5/search?by=maintainer&arg=' \
-  | jq '.results[] | select(.OutOfDate != null) | {Name, OutOfDate, Version}'
+# use query-string arg= instead. Orphans exceed 5000, so this returns
+# {"type":"error","error":"Too many package results.",...} — expected.
+curl 'https://aur.archlinux.org/rpc/v5/search?by=maintainer&arg='
+
+# Out-of-date orphans — filter the metadata archive instead
+curl -sL https://aur.archlinux.org/packages-meta-v1.json.gz | gzip -dc \
+  | jq '.[] | select(.Maintainer == null and .OutOfDate != null) | {Name, OutOfDate, Version}'
 
 # Bulk fetch — use the metadata archive once per refresh
 curl -O https://aur.archlinux.org/packages-meta-ext-v1.json.gz
