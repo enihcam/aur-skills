@@ -12,7 +12,7 @@ Submit, update, and maintain packages in the Arch User Repository.
 
 ## Submission Rules
 
-- Package must NOT exist in official repos (core/extra/community)
+- Package must NOT exist in official repos (`core` / `extra`; `[community]` was merged into `[extra]` in 2023)
 - Must be useful, unique, and x86_64-compatible
 - Must include a LICENSE file (0BSD recommended for PKGBUILD)
 - Prebuilt binaries allowed only with `-bin` suffix

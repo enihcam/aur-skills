@@ -14,7 +14,7 @@ Create and edit PKGBUILD files — the build scripts used by makepkg to produce 
 
 ```bash
 pkgname=my-app              # lowercase, alphanumeric + @._+-
-pkgver=1.0.0               # no hyphens — use underscores
+pkgver=1.0.0                # no hyphens — use underscores
 pkgrel=1                    # resets to 1 on new upstream version
 arch=('x86_64')             # or 'any'
 license=('MIT')             # SPDX identifier
@@ -27,11 +27,14 @@ pkgdesc="Short description"    # ~80 chars, no self-reference
 url="https://example.com"
 depends=('glibc>=2.35')
 makedepends=('cmake' 'ninja')  # base-devel assumed present
+checkdepends=('python-pytest') # only needed when check() runs
 optdepends=('cups: printing')
 source=("$pkgname-$pkgver.tar.gz::https://example.com/v$pkgver.tar.gz")
-sha256sums=('abc123...')
-noextract=()        # skip extraction for certain sources
-validpgpkeys=()     # PGP key fingerprints
+b2sums=('abc123...')           # prefer b2 or sha512 over weaker hashes
+noextract=()                   # skip extraction for certain sources
+validpgpkeys=()                # full uppercase PGP fingerprints, no spaces
+install=$pkgname.install       # optional install script (not in source=)
+changelog=$pkgname.changelog   # optional changelog (not in source=)
 ```
 
 ## Functions
@@ -41,6 +44,7 @@ prepare() { cd "$srcdir/$pkgname-$pkgver"; patch -p1 -i "$srcdir/fix.patch"; }
 build()   { cd "$srcdir/$pkgname-$pkgver"; make; }
 check()   { cd "$srcdir/$pkgname-$pkgver"; make check; }   # optional
 package() { cd "$srcdir/$pkgname-$pkgver"; make DESTDIR="$pkgdir" install; }
+verify()  { … }   # optional; runs before checksum/PGP checks (makepkg --noverify skips it)
 ```
 
 **Always quote** `"$srcdir"` and `"$pkgdir"` — unquoted paths break with spaces.
@@ -55,13 +59,13 @@ Install-time messages (extra setup, post-install notes) belong in a `.install` f
 
 ## Naming
 
-- **Suffixes:** `-git`, `-svn`, `-hg`, `-bzr`, `-darcs` for VCS; `-bin` for prebuilt
+- **Suffixes:** `-git`, `-svn`, `-hg`, `-bzr`, `-darcs`, `-cvs` for VCS; `-bin` for prebuilt
 - No version-number suffixes (e.g. not `libfoo2` — use real package names)
 - Must match upstream tarball name when possible
 
 ## Versioning
 
-- `pkgver` = upstream version, **no hyphens** (use `_` instead)
+- `pkgver` = upstream version, **no hyphens** (use `_` instead); also no colons, slashes, or whitespace
 - `pkgrel` = Arch package revision; bump for PKGBUILD-only changes, reset to 1 on new pkgver
 - `epoch` = 0 by default; increment only when you must force a version to appear newer
 
@@ -71,17 +75,19 @@ Install-time messages (extra setup, post-install notes) belong in a `.install` f
 # Custom filename to avoid generic downloads
 source=("unique-name.tar.gz::https://example.com/download/v1.0.tar.gz")
 
-# VCS sources — prefer tag object hash over tag name (tags can be force-pushed)
-_tag=$(git rev-parse "v$pkgver")   # compute once, e.g. from a release-monitoring script
-source=("git+https://github.com/user/repo.git#tag=${_tag}")
+# Pinned git tag: store the tag *object* hash (computed offline), not a live command
+_tag=1234567890abcdef1234567890abcdef12345678  # git rev-parse "v$pkgver"
+source=("git+https://github.com/user/repo.git?signed#tag=$_tag")
 
-# PGP verification
+# PGP verification of detached signatures (.sig / .sign / .asc)
 validpgpkeys=('FINGERPRINT')
 ```
 
+Do **not** write `_tag=$(git rev-parse …)` in the PKGBUILD — that runs at parse time before the repo is cloned. Pin the hash once (comment how you obtained it), then bump `_tag` together with `pkgver`.
+
 If upstream signs only commits/tags (not tarballs), verify with `gpg.ssh.allowedSignersFile` for SSH-signed tags, or via `git verify-tag` / `git verify-commit`.
 
-`updpkgsums PKGBUILD` to regenerate checksums. Use `b2sums` or `sha512sums` over `md5sums`.
+`updpkgsums PKGBUILD` to regenerate checksums. Prefer `b2sums` or `sha512sums` over `md5sums` / `sha1sums`.
 
 ## Licensing
 
@@ -102,11 +108,30 @@ makepkg --printsrcinfo > .SRCINFO       # regen before push
 ## Examples
 
 **Autotools:** `./configure --prefix=/usr && make && make DESTDIR="$pkgdir" install`
-**CMake:** `cmake -B build -S . -DCMAKE_INSTALL_PREFIX=/usr && cmake --install build`
-**Python:** `python setup.py build && python setup.py install --root="$pkgdir" --optimize=1`
+
+**CMake:** `cmake -B build -S . -DCMAKE_INSTALL_PREFIX=/usr && cmake --build build && cmake --install build --destdir "$pkgdir"`
+
+**Python (PEP 517 — preferred):**
+
+```bash
+makedepends=('python-build' 'python-installer' 'python-wheel')  # + the build backend
+
+build() {
+  cd "$_name-$pkgver"
+  python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "$_name-$pkgver"
+  python -m installer --destdir="$pkgdir" dist/*.whl
+}
+```
+
+Only fall back to `python setup.py build` / `install --root="$pkgdir"` when the project has no usable `pyproject.toml` build backend (deprecated; emits `SetuptoolsDeprecationWarning`).
 
 ## Related
 
 - `aur-package-guidelines` — standards reference
 - `aur-audit` — deeper validation
 - `aur-makepkg` — build process options
+- `aur-vcs-packages` — live VCS / `-git` packages

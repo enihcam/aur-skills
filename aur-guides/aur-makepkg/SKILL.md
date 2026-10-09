@@ -59,7 +59,7 @@ Use chroot builds to verify the package builds from scratch in a clean environme
 - **Missing deps:** add to `makedepends` or `depends`
 - **Network required at build:** unacceptable for official repos; note in comments for AUR
 - **Outdated checksums:** run `updpkgsums`
-- **Parallel build failure:** set `MAKEFLAGS="-j1"` or add `!parallelsmake` to options
+- **Parallel build failure:** set `MAKEFLAGS="-j1"` for the build, or add `!makeflags` to `options` so the PKGBUILD ignores user `MAKEFLAGS`
 
 ## Reproducible Builds
 

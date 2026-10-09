@@ -156,4 +156,3 @@ The Arch Wiki links to canonical Python clients. For new helpers, prefer:
 - `aur-audit` — uses RPC to verify `OutOfDate`, popularity, votes before flagging
 - `aur-submission` — `URLPath` is the snapshot download link for non-git clients
 - Full spec: https://wiki.archlinux.org/title/Aurweb_RPC_interface
-- Swagger: https://aur.archlinux.org/rpc/swagger

@@ -29,7 +29,7 @@ pacman -Si pkgname       # remote package info
 pacman -Qi pkgname       # installed package info
 pacman -Ql pkgname       # files owned by package
 pacman -Qo /path/file    # which package owns file
-pacman -Fl pattern       # files in remote package (requires pkgfile)
+pacman -Fl pattern       # list files in a sync-DB package (Files DB; not pkgfile)
 pacman -Qdt              # orphaned packages
 pacman -Qmq              # foreign packages (typically AUR)
 ```

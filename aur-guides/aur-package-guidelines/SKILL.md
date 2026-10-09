@@ -15,41 +15,42 @@ Reference for Arch Linux packaging standards and conventions.
 - Lowercase alphanumeric characters + `@ . _ + -`
 - Cannot start with `-` or `.`
 - Match upstream source tarball name when possible
-- Suffixes: `-git`, `-svn`, `-hg`, `-bzr` (VCS); `-bin` (prebuilt)
-- No version-number-as-name (e.g. not `libfoo2`)
+- Suffixes: `-git`, `-svn`, `-hg`, `-bzr`, `-darcs`, `-cvs` (VCS); `-bin` (prebuilt)
+- No version-number-as-name (e.g. not `libfoo2`) unless major-version coexistence is required (e.g. `gtk2` / `gtk3`)
 
 ## Versioning
 
-- `pkgver`: upstream version, **no hyphens** (use `_`)
+- `pkgver`: upstream version, **no hyphens** (use `_`); also no colons, slashes, or whitespace
 - `pkgrel`: starts at 1; bump for PKGBUILD-only changes; reset to 1 on new pkgver
 - `epoch`: 0 default; increment only to force version ordering
 
 ## Dependencies
 
 - **List ALL direct dependencies** — never rely on transitive deps
+- Use `find-libdeps(1)` (from `devtools`) / `ldd` / `readelf` to identify direct library deps
 - Do NOT list packages from `base-devel` (gcc, make, etc.) in `makedepends`
-- Use `optdepends=('pkg: description')` for optional features
-- Architecture-specific: `depends_x86_64=()`
+- Optional features belong in `optdepends=('pkg: short reason')`, NOT in `depends`
+- Architecture-specific: `depends_x86_64=()`, `makedepends_x86_64=()`, etc.
 
 ## Directory Layout
 
 | Path | Use |
 |------|-----|
 | `/etc` | System-essential configuration files |
-| `/etc/_pkg_` | Per-package configuration files (use a subdir when there are multiple) |
+| `/etc/pkg` | Per-package configuration (subdir when there are multiple files) |
 | `/usr/bin` | Executables |
 | `/usr/lib` | Libraries |
 | `/usr/include` | Header files |
-| `/usr/lib/_pkg_` | Modules, plugins, internals (avoid `/usr/libexec/` — use this instead) |
-| `/usr/share/doc/_pkg_` | Application documentation |
+| `/usr/lib/pkg` | Modules, plugins, internals (avoid `/usr/libexec/`) |
+| `/usr/share/doc/pkg` | Application documentation |
 | `/usr/share/info` | GNU Info system files |
-| `/usr/share/licenses/_pkg_` | Application licenses |
+| `/usr/share/licenses/pkg` | Application licenses |
 | `/usr/share/man` | Manpages |
-| `/usr/share/_pkg_` | Application data |
-| `/var/lib/_pkg_` | Persistent application storage |
-| `/opt/_pkg_` | Large self-contained packages |
+| `/usr/share/pkg` | Application data |
+| `/var/lib/pkg` | Persistent application storage |
+| `/opt/pkg` | Large self-contained packages |
 
-**Never install to `/usr/local/`** — it is reserved for the system administrator.
+**Never install to `/usr/local/`** — reserved for the system administrator.
 
 **Do NOT use:** `/bin`, `/sbin`, `/dev`, `/home`, `/srv`, `/media`, `/mnt`, `/proc`, `/root`, `/selinux`, `/sys`, `/tmp`, `/var/tmp`, `/run`
 
@@ -65,13 +66,6 @@ Reference for Arch Linux packaging standards and conventions.
 - Descriptions: ~80 chars max, no self-reference ("A text editor" not "Foo is a text editor")
 - `packager` field is customizable in `/etc/makepkg.conf` or `~/.makepkg.conf`
 
-## Dependencies
-
-- **Do not rely on transitive dependencies** — list every direct library dep
-- Use `find-libdeps(1)` (from `devtools`) to identify direct library deps
-- Optional features belong in `optdepends=('pkg: short reason')`, NOT in `depends`
-- `base-devel` is assumed present — don't list `gcc`, `make`, etc. in `makedepends`
-
 ## Relations
 
 - Do NOT add `$pkgname` to `provides` (implicitly provided)
@@ -82,7 +76,7 @@ Reference for Arch Linux packaging standards and conventions.
 
 - **HTTPS** for tarballs; `git+https://` for git sources
 - **PGP verification** wherever possible — fetch keys listed in `validpgpkeys=()`
-- For git tag sources, use the **tag object hash** (`git rev-parse "v$pkgver"`) — tag names can be force-pushed
+- For git tag sources, pin the **tag object hash** (hardcoded `_tag=…` from `git rev-parse "v$pkgver"`) — tag names can be force-pushed
 - Sources must be unique in `$srcdir` (use `name::url` syntax to rename if needed)
 - Avoid mirrors (SourceForge, etc.) — they may disappear
 - Don't strip PGP/checksum checks just because upstream forgot to sign a release
