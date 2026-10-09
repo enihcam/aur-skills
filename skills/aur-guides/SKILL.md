@@ -10,6 +10,13 @@ license: MIT
 
 Master dispatcher for AUR package development. Routes to the right sub-skill for your task.
 
+Install siblings alongside this skill (they are separate Agent Skills packages under `skills/`):
+
+```bash
+gh skill install enihcam/aur-skills --all
+# or: gh skill install enihcam/aur-skills aur-pkgbuild …
+```
+
 ## When NOT to Use
 
 - Official Arch packages (use Package Maintainer workflow)
