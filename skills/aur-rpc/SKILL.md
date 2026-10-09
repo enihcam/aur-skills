@@ -26,7 +26,7 @@ GET /rpc/v5/search/<keyword>?by=<field>
 |------------|---------|
 | `name-desc` *(default)* | Match against `Name` and `Description` |
 | `name` | Match against `Name` only |
-| `maintainer` | Match against `Maintainer` (empty → orphan list) |
+| `maintainer` | Match against `Maintainer` (empty `arg=` → orphan list) |
 | `comaintainers` | Match against comaintainer usernames |
 | `depends` | Packages whose `Depends` contains the keyword |
 | `makedepends` | Packages whose `MakeDepends` contains the keyword |
@@ -134,8 +134,9 @@ curl 'https://aur.archlinux.org/rpc/v5/search/neovim'
 # Info for multiple packages (URL-encoded brackets)
 curl 'https://aur.archlinux.org/rpc/v5/info?arg%5B%5D=yay&arg%5B%5D=paru'
 
-# Out-of-date packages maintained by a user (search then filter)
-curl 'https://aur.archlinux.org/rpc/v5/search/?by=maintainer' \
+# Orphan packages (empty maintainer). Path /search/ with no keyword 404s —
+# use query-string arg= instead (returns 200; may error if result set is huge).
+curl 'https://aur.archlinux.org/rpc/v5/search?by=maintainer&arg=' \
   | jq '.results[] | select(.OutOfDate != null) | {Name, OutOfDate, Version}'
 
 # Bulk fetch — use the metadata archive once per refresh
